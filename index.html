@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sorgu Arayüzü (Demo)</title>
+<style>
+:root{--bg:#161a22;--panel:#1f2530;--line:#343c4b;--text:#e8ebf0;--mute:#8e98a8;--gold:#f2b64a;--cyan:#6fd6e8}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;padding:24px}
+.wrap{max-width:960px;margin:0 auto}
+.demo{background:#3a2a10;border:1px solid var(--gold);color:var(--gold);padding:10px 14px;border-radius:8px;margin-bottom:20px;font-size:14px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:24px;margin-bottom:24px}
+h1{font-size:20px;margin:0 0 18px}
+h2{font-size:17px;margin:0 0 12px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+label{display:block;font-size:12px;color:var(--mute);margin-bottom:6px;letter-spacing:.04em}
+input{width:100%;padding:13px 14px;background:#12161d;border:1px solid var(--line);border-radius:10px;color:var(--text);font-size:15px}
+input:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.actions{display:flex;align-items:center;gap:14px;margin-top:20px}
+button{background:var(--gold);color:#241a05;border:0;border-radius:10px;padding:12px 22px;font-weight:600;font-size:15px;cursor:pointer}
+#durum{color:var(--mute);font-size:14px}
+.tablewrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:640px}
+th{color:var(--gold);text-align:left;font-size:13px;padding:10px 12px;border-bottom:1px solid var(--line)}
+td{padding:14px 12px;border-bottom:1px solid #2a3140}
+td.tel{color:var(--cyan);font-weight:600}
+td.ad{font-weight:700}
+.bos{color:var(--mute);padding:14px 0}
+.dl{margin-top:14px;background:transparent;color:var(--text);border:1px solid var(--line);font-weight:500}
+@media(max-width:640px){.grid{grid-template-columns:1fr}body{padding:14px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <section class="panel" aria-labelledby="bs">
+    <h1 id="bs">Sorgu parametreleri</h1>
+    <div class="grid">
+      <div><label for="telefon">TELEFON NUMARASI</label>
+        <input id="telefon" type="tel" inputmode="numeric" placeholder="Örn: 5XX XXX XX XX" autocomplete="off"></div>
+      <div><label for="adsoyad">AD SOYAD</label>
+        <input id="adsoyad" type="text" placeholder="Örn: Örnek Kişi" autocomplete="off"></div>
+      <div><label for="il">İL</label>
+        <input id="il" type="text" placeholder="Örn: İstanbul" autocomplete="off"></div>
+      <div><label for="ilce">İLÇE</label>
+        <input id="ilce" type="text" placeholder="Örn: Kadıköy" autocomplete="off"></div>
+    </div>
+    <div class="actions">
+      <button id="sorgula" type="button">Sorgula</button>
+      <span id="durum" role="status">Henüz sorgu yapılmadı</span>
+    </div>
+  </section>
+
+  <section class="panel" aria-labelledby="sn">
+    <h2 id="sn">Sonuç</h2>
+    <div class="tablewrap" id="sonuc"><div class="bos">Sonuç görmek için Sorgula'ya bas.Hemen Sorgula.</div></div>
+  </section>
+</div>
+
+<script>
+const TARGET_PHONE = "5308814104";
+const ORNEK = {tel:"530 881 41 04", ad:"MUHAMMED OKTAY AYDEMİR", dogum:"19.11.2008", nufus:"Kocaeli / Dilovası"};
+
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function normalizePhone(v){
+  return String(v || "").replace(/\D/g, "");
+}
+
+document.getElementById("sorgula").addEventListener("click",()=>{
+  const telInput = document.getElementById("telefon").value;
+  const normalized = normalizePhone(telInput);
+
+  if (normalized === TARGET_PHONE) {
+    document.getElementById("durum").textContent = "Kayıt bulundu";
+    document.getElementById("sonuc").innerHTML = `
+      <table>
+        <thead><tr><th>#</th><th>TELEFON</th><th>AD SOYAD</th><th>DOĞUM TARİHİ</th><th>NÜFUS</th></tr></thead>
+        <tbody><tr><td>1</td><td class="tel">${esc(ORNEK.tel)}</td><td class="ad">${esc(ORNEK.ad)}</td><td>${esc(ORNEK.dogum)}</td><td>${esc(ORNEK.nufus)}</td></tr></tbody>
+      </table>
+      <div class="bos">Örnek veri: kurgusal kayıt.</div>`;
+    return;
+  }
+
+  document.getElementById("durum").textContent = "Sonuç bulunamadı";
+  document.getElementById("sonuc").innerHTML = `<div class="bos">Sonuç bulunamadı.</div>`;
+});
+</script>
+</body>
+</html>
