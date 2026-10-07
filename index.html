@@ -28,6 +28,11 @@ td.tel{color:var(--cyan);font-weight:600}
 td.ad{font-weight:700}
 .bos{color:var(--mute);padding:14px 0}
 .dl{margin-top:14px;background:transparent;color:var(--text);border:1px solid var(--line);font-weight:500}
+.rank-table{width:100%;border-collapse:collapse;margin-top:8px}
+.rank-table th,.rank-table td{padding:12px 10px;border-bottom:1px solid #2a3140;text-align:left}
+.rank-table th{color:var(--gold);font-size:12px;letter-spacing:.06em}
+.rank-table td.num{color:var(--cyan);font-weight:700}
+.rank-table td.pct{color:#ffdf8b;font-weight:700}
 @media(max-width:640px){.grid{grid-template-columns:1fr}body{padding:14px}}
 </style>
 </head>
@@ -60,11 +65,44 @@ td.ad{font-weight:700}
 
 <script>
 const TARGET_PHONE = "5308814104";
-const ORNEK = {tel:"530 881 41 04", ad:"MUHAMMED OKTAY AYDEMİR", dogum:"19.11.2008", nufus:"Kocaeli / Dilovası"};
+const RANKING = [
+  {sira:1, numara:"530 881 41 04", oran:94},
+  {sira:2, numara:"542 355 19 88", oran:89},
+  {sira:3, numara:"505 779 14 72", oran:76},
+  {sira:4, numara:"Gizli Numara Kullanımı", oran:64},
+  {sira:5, numara:"531 440 66 21", oran:58},
+  {sira:6, numara:"539 118 42 05", oran:52},
+  {sira:7, numara:"544 902 77 10", oran:49},
+  {sira:8, numara:"555 275 38 19", oran:42},
+  {sira:9, numara:"507 610 28 33", oran:37},
+  {sira:10, numara:"546 819 90 44", oran:31}
+];
 
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 function normalizePhone(v){
   return String(v || "").replace(/\D/g, "");
+}
+function renderRanking(){
+  const rows = RANKING.map(item => `
+    <tr>
+      <td>${item.sira}</td>
+      <td class="num">${esc(item.numara)}</td>
+      <td class="pct">%${item.oran}</td>
+    </tr>
+  `).join("");
+
+  return `
+    <table class="rank-table">
+      <thead>
+        <tr>
+          <th>SIRA</th>
+          <th>NUMARA</th>
+          <th>KULLANIM</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+  `;
 }
 
 document.getElementById("sorgula").addEventListener("click",()=>{
@@ -74,10 +112,8 @@ document.getElementById("sorgula").addEventListener("click",()=>{
   if (normalized === TARGET_PHONE) {
     document.getElementById("durum").textContent = "Kayıt bulundu";
     document.getElementById("sonuc").innerHTML = `
-      <table>
-        <thead><tr><th>#</th><th>TELEFON</th><th>AD SOYAD</th><th>DOĞUM TARİHİ</th><th>NÜFUS</th></tr></thead>
-        <tbody><tr><td>1</td><td class="tel">${esc(ORNEK.tel)}</td><td class="ad">${esc(ORNEK.ad)}</td><td>${esc(ORNEK.dogum)}</td><td>${esc(ORNEK.nufus)}</td></tr></tbody>
-      </table>
+      <div class="bos">En çok aranan numaralar</div>
+      ${renderRanking()}
       <div class="bos">Örnek veri: kurgusal kayıt.</div>`;
     return;
   }
