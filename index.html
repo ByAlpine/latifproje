@@ -66,16 +66,13 @@ td.ad{font-weight:700}
 <script>
 const TARGET_PHONE = "5308814104";
 const RANKING = [
-  {sira:1, numara:"530 881 41 04", oran:94},
-  {sira:2, numara:"542 355 19 88", oran:89},
-  {sira:3, numara:"505 779 14 72", oran:76},
-  {sira:4, numara:"Gizli Numara Kullanımı", oran:64},
-  {sira:5, numara:"531 440 66 21", oran:58},
-  {sira:6, numara:"539 118 42 05", oran:52},
-  {sira:7, numara:"544 902 77 10", oran:49},
-  {sira:8, numara:"555 275 38 19", oran:42},
-  {sira:9, numara:"507 610 28 33", oran:37},
-  {sira:10, numara:"546 819 90 44", oran:31}
+  {sira:1, isim:"Ufuk Doğan", oran:87},
+  {sira:2, isim:"Berat Furkan Aydemir", oran:79},
+  {sira:3, isim:"Yunus Emre Şahinkaya", oran:77},
+  {sira:4, isim:"Osman Semi Tünkler", oran:68},
+  {sira:5, isim:"Orhan Aydemir", oran:61},
+  {sira:6, isim:"Gizli Numara Kullanımı", oran:59},
+  {sira:7, isim:"Mert Kaya", oran:47}
 ];
 
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
@@ -86,7 +83,7 @@ function renderRanking(){
   const rows = RANKING.map(item => `
     <tr>
       <td>${item.sira}</td>
-      <td class="num">${esc(item.numara)}</td>
+      <td class="num">${esc(item.isim)}</td>
       <td class="pct">%${item.oran}</td>
     </tr>
   `).join("");
@@ -96,8 +93,8 @@ function renderRanking(){
       <thead>
         <tr>
           <th>SIRA</th>
-          <th>NUMARA</th>
-          <th>KULLANIM</th>
+          <th>İSİM / KULLANIM</th>
+          <th>% KULLANIM</th>
         </tr>
       </thead>
       <tbody>${rows}</tbody>
